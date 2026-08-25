@@ -1,7 +1,4 @@
 {
   "buildCommand": "pip install -r requirements.txt",
-  "framework": "fastapi",
-  "python": {
-    "version": "3.9"
-  }
+  "framework": "fastapi"
 }
