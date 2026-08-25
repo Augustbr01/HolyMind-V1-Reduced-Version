@@ -1,36 +1,128 @@
+const TEMA_KEY = 'holymind-tema';
 
+function aplicarTema(tema) {
+    document.documentElement.setAttribute('data-theme', tema);
+    const btn = document.getElementById('btn-tema');
+    if (btn) {
+        const proximo = tema === 'dark' ? 'Tema claro' : 'Tema escuro';
+        btn.setAttribute('title', proximo);
+        btn.setAttribute('aria-label', proximo);
+    }
+}
+
+function alternarTema() {
+    const atual = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const novo = atual === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem(TEMA_KEY, novo); } catch (e) {}
+    aplicarTema(novo);
+}
+
+(function iniciarTema() {
+    let salvo = null;
+    try { salvo = localStorage.getItem(TEMA_KEY); } catch (e) {}
+    aplicarTema(salvo === 'light' ? 'light' : 'dark');
+})();
 
 // Functions for Alerts Modal
 
 function abrirAvisos() {
-    const overlay = document.getElementById('avisos-overlay');
-    overlay.classList.remove('fade-out');
-    overlay.classList.add('fade-in');
+    document.getElementById('avisos-overlay').classList.add('aberto');
 }
 
 function fecharAvisos() {
-    const overlay = document.getElementById('avisos-overlay');
-    overlay.classList.remove('fade-in');
-    overlay.classList.add('fade-out');
-    setTimeout(() => {
-        overlay.classList.remove('fade-out');
-    }, 300);
+    document.getElementById('avisos-overlay').classList.remove('aberto');
 }
 
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') fecharAvisos();
+});
 
-// Code to interact with the API and display the AI's response on screen
 
+// Input Helpers
+
+const entradaEl = document.getElementById('entrada');
+const contadorEl = document.getElementById('contador');
+
+function atualizarContador() {
+    contadorEl.textContent = `${entradaEl.value.length} caracteres`;
+}
+
+entradaEl.addEventListener('input', atualizarContador);
+atualizarContador();
+
+function limparEntrada() {
+    entradaEl.value = '';
+    atualizarContador();
+    entradaEl.focus();
+}
+
+function usarSugestao(btn) {
+    entradaEl.value = btn.textContent.trim();
+    atualizarContador();
+    entradaEl.focus();
+}
+
+// Response Panel
+
+const cardResposta = document.getElementById('resposta-card');
+const respostaEl = document.getElementById('resposta');
+const carregandoEl = document.getElementById('carregando');
+const modoAtivoEl = document.getElementById('modo-ativo');
+
+function irParaResposta() {
+    requestAnimationFrame(() => {
+        const top = cardResposta.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top: top < 0 ? 0 : top, behavior: 'smooth' });
+    });
+}
+
+function destacarModo(nome) {
+    document.querySelectorAll('.mode').forEach(b => {
+        b.classList.toggle('ativo', b.dataset.modo === nome);
+    });
+}
+
+function limparResposta() {
+    respostaEl.textContent = '';
+    modoAtivoEl.textContent = '';
+    carregandoEl.hidden = true;
+    cardResposta.hidden = true;
+    destacarModo(null);
+}
+
+function copiarResposta() {
+    const btn = document.getElementById('btn-copiar');
+    const texto = respostaEl.innerText || respostaEl.textContent || '';
+    if (navigator.clipboard) navigator.clipboard.writeText(texto);
+    btn.textContent = 'Copiado';
+    setTimeout(() => { btn.textContent = 'Copiar'; }, 1600);
+}
+
+// Codigo para interagir com a API e interface da IA
 
 async function sendRequest(type) { // Function to request the AI's response, sending the user's input to the API
-    const entrada = document.getElementById('entrada').value.trim();
-    const respostaIA = document.getElementById('resposta');
+    const entrada = entradaEl.value.trim();
+    const nomeModo = (document.querySelector(`.mode[onclick*="${type}"]`) || {}).dataset;
+
+    cardResposta.hidden = false;
+    cardResposta.classList.remove('glow');
+    void cardResposta.offsetWidth; // restart the glow animation
+    cardResposta.classList.add('glow');
 
     if (!entrada) {
-        respostaIA.innerText = "DIGITE ALGO PRIMEIRO"; // Text for when the user doesn't type anything
+        carregandoEl.hidden = true;
+        modoAtivoEl.textContent = '';
+        respostaEl.textContent = 'Digite uma pergunta primeiro.'; // Text for when the user doesn't type anything
+        destacarModo(null);
+        irParaResposta();
         return;
     }
 
-    respostaIA.innerText = "Carregando ..."; // Loading text
+    modoAtivoEl.textContent = nomeModo ? nomeModo.modo : '';
+    destacarModo(nomeModo ? nomeModo.modo : null);
+    respostaEl.textContent = '';
+    carregandoEl.hidden = false; // Loading state
+    irParaResposta();
 
     try {
         const resp = await fetch(`/${type}`, { // Sending the request
@@ -39,17 +131,20 @@ async function sendRequest(type) { // Function to request the AI's response, sen
             body: JSON.stringify({text: entrada}) // JSON body of the content to be received from the API
         });
 
+        carregandoEl.hidden = true;
+
         if (resp.ok) { // If the API response is OK
             const data = await resp.json(); // Data will wait for JSON
-            respostaIA.innerHTML = data.explanation; // The JSON will be displayed in HTML directly in the response div
+            respostaEl.innerHTML = data.explanation; // The JSON will be displayed in HTML directly in the response div
         } else {
             const dataErro = await resp.json(); // If the response is outside the condition, the expected error will be displayed in the response div
-            respostaIA.innerText = dataErro.detail
+            respostaEl.textContent = dataErro.detail
                 ? `Erro: ${dataErro.detail}`
                 : "Error fetching explanation.";
         }
     } catch (error) {
-        respostaIA.innerText = "Internet ta ruim ou o servidor caiu :("
+        carregandoEl.hidden = true;
+        respostaEl.textContent = "Internet ta ruim ou o servidor caiu :("
     }
 }
 
@@ -133,15 +228,17 @@ function buscarVersiculo() { // Searches for the selected verse and displays it 
     String(v.versiculo) === String(vers) // Filters by verse
   );
 
+  document.getElementById('sem-resultado').hidden = true;
+  document.getElementById('resultado').hidden = false;
   document.getElementById('referencia').textContent = `${resultado.livro} ${cap}:${vers}`; // Shows the reference
-  document.getElementById('texto').textContent = resultado?.texto || 'Não encontrado'; // Shows the verse text
+  document.getElementById('texto').textContent = resultado.texto || 'Não encontrado'; // Shows the verse text
 
   // Stores all verses of the chapter (for "show more")
   versiculosDoCapitulo = versiculos.filter(v =>
     v.livro_id === livroId && String(v.capitulo) === String(cap) // Filters by book and chapter
   );
 
-  document.getElementById('mais-btn').style.display = 'inline-block'; // Shows the "show more" button
+  document.getElementById('mais-btn').hidden = false; // Shows the "show more" button
   document.getElementById('mais-versiculos').innerHTML = ''; // Clears the more verses area
 }
 

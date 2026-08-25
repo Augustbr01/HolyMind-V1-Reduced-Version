@@ -5,79 +5,252 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>HolyMind</title>
         
+        <link rel="icon" href="/static/img/logoholymind.png">
         <link rel="stylesheet" href="/static/css/index.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         
     </head>
     <body>
-        <div class="container">
-            <div class="inputbox">
-                <h1>HolyMind</h1>
-                <button id="btn-avisos" onclick="abrirAvisos()">ℹ️</button>
-                <p>Faça perguntas ou peça explicações de trecho da biblia para IA</p>
-                <textarea id="entrada" placeholder="Pergunte algo como: 'Explique a parábola do filho pródigo'"></textarea>
-                <div class="button">
-                    <button onclick="sendRequest('general-explanation')">Prompt Geral</button>
-                    <button onclick="sendRequest('practical-explanation')">Aprofundado Prático</button>
-                    <button onclick="sendRequest('interpretations-explanation')">Interpretação Variada</button>
-                    <button onclick="sendRequest('historical-explanation')">Contexto Histórico</button>
-                    <button onclick="sendRequest('study-guide-explanation')">Guia de Estudo</button>
-                    <button onclick="sendRequest('devotional-explanation')">Devocional</button>
+        <header class="topbar">
+            <div class="topbar-inner">
+                <!-- Logo do projeto -->
+                <img class="brand-logo" src="/static/img/logoholymind.png" alt="HolyMind"> 
+                <!-- Texto Logo do projeto -->
+                <div class="brand-text">
+                    <span class="brand-name">HolyMind</span>
+                    <span class="brand-tag">V1 · Versão reduzida</span>
                 </div>
-                <div id="resposta"></div>
+                <div class="spacer"></div>
+                <!-- Botão Toggle de Alterar Tema -->
+                <button id="btn-tema" class="icon-btn" title="Tema claro" aria-label="Alternar tema" onclick="alternarTema()"> 
+                    <svg class="ico ico-sol" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="4.2"></circle>
+                        <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"></path>
+                    </svg>
+                    <svg class="ico ico-lua" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.5 14.3A8.6 8.6 0 019.7 3.5a8.6 8.6 0 1010.8 10.8z"></path>
+                    </svg>
+                </button>
+                <!-- Botão Detalhes da versão -->
+                <button id="btn-avisos" class="info-btn" title="Sobre esta versão" onclick="abrirAvisos()">
+                    <span class="info-glyph">i</span>
+                    <span>Sobre esta versão</span>
+                </button>
             </div>
-        
-            <div class="pesquisaLivro">
-                <h2>Pesquisar por livro, capítulo e versículo</h2>
+        </header>
 
-                <select class="input" id="livro-select"></select>
-                <select class="input" id="capitulo-select"></select>
-                <select class="input" id="versiculo-select"></select>
-                
-                
-                <div class="button">
-                    <button id="botao-select" onclick="buscarVersiculo()">Pesquisar</button>
+        <!-- Main principal -->
+        <main class="layout">
+            <div class="col-main">
+                <section class="card">
+                    <div class="card-head">
+                        <h1>Estudo com IA</h1>
+                        <span class="badge">GPT-4o mini</span>
+                    </div>
+                    <p class="lede">Faça perguntas ou peça explicações de um trecho da Bíblia. Escolha abaixo a profundidade da resposta — cada modo usa um prompt diferente.</p>
+
+                    <div class="composer">
+                        <textarea id="entrada" placeholder="Pergunte algo como: 'Explique a parábola do filho pródigo'"></textarea>
+                        <div class="composer-foot">
+                            <span id="contador" class="mono muted">0 caracteres</span>
+                            <span class="spacer"></span>
+                            <button class="ghost-btn" onclick="limparEntrada()">Limpar</button>
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <span class="eyebrow">Sugestões</span>
+                        <div class="chips">
+                            <button class="chip" onclick="usarSugestao(this)">Explique a parábola do filho pródigo</button>
+                            <button class="chip" onclick="usarSugestao(this)">O que significa Salmos 23?</button>
+                            <button class="chip" onclick="usarSugestao(this)">Qual o contexto histórico de Êxodo 20?</button>
+                            <button class="chip" onclick="usarSugestao(this)">Como aplicar 1 Coríntios 13 hoje?</button>
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <span class="eyebrow">Modos de estudo</span>
+                        <div class="modes">
+                            <button class="mode" data-modo="Prompt Geral" onclick="sendRequest('general-explanation')">
+                                <span class="mode-top"><span class="dot"></span><span class="mode-name">Prompt Geral</span></span>
+                                <span class="mode-desc">Explicação simples e acessível, ideal para começar.</span>
+                            </button>
+                            <button class="mode" data-modo="Aprofundado Prático" onclick="sendRequest('practical-explanation')">
+                                <span class="mode-top"><span class="dot"></span><span class="mode-name">Aprofundado Prático</span></span>
+                                <span class="mode-desc">Como o ensino se aplica ao dia a dia.</span>
+                            </button>
+                            <button class="mode" data-modo="Interpretação Variada" onclick="sendRequest('interpretations-explanation')">
+                                <span class="mode-top"><span class="dot"></span><span class="mode-name">Interpretação Variada</span></span>
+                                <span class="mode-desc">Análise teológica e perspectivas de estudo.</span>
+                            </button>
+                            <button class="mode" data-modo="Contexto Histórico" onclick="sendRequest('historical-explanation')">
+                                <span class="mode-top"><span class="dot"></span><span class="mode-name">Contexto Histórico</span></span>
+                                <span class="mode-desc">Cenário histórico e cultural da passagem.</span>
+                            </button>
+                            <button class="mode" data-modo="Guia de Estudo" onclick="sendRequest('study-guide-explanation')">
+                                <span class="mode-top"><span class="dot"></span><span class="mode-name">Guia de Estudo</span></span>
+                                <span class="mode-desc">Pontos-chave e perguntas para reflexão.</span>
+                            </button>
+                            <button class="mode" data-modo="Devocional" onclick="sendRequest('devotional-explanation')">
+                                <span class="mode-top"><span class="dot"></span><span class="mode-name">Devocional</span></span>
+                                <span class="mode-desc">Reflexão espiritual e meditação pessoal.</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card resposta-card" id="resposta-card" hidden>
+                    <div class="resposta-head">
+                        <span class="eyebrow">Resposta</span>
+                        <span id="modo-ativo" class="mono accent"></span>
+                        <span class="spacer"></span>
+                        <div class="resposta-actions">
+                            <button id="btn-copiar" class="line-btn" onclick="copiarResposta()">Copiar</button>
+                            <button class="ghost-btn" onclick="limparResposta()">Limpar</button>
+                        </div>
+                    </div>
+
+                    <div id="carregando" class="loading" hidden>
+                        <div class="loading-head">
+                            <span class="pulse"></span><span class="pulse"></span><span class="pulse"></span>
+                            <span class="loading-text">Carregando ...</span>
+                        </div>
+                        <div class="skeleton"></div>
+                        <div class="skeleton w92"></div>
+                        <div class="skeleton w64"></div>
+                    </div>
+
+                    <div id="resposta" class="resposta"></div>
+                </section>
+            </div>
+
+            <aside class="col-side">
+                <section class="card">
+                    <h2>Bíblia</h2>
+                    <p class="lede small">Pesquise por livro, capítulo e versículo. Os textos ficam armazenados localmente em JSON.</p>
+
+                    <div class="fields">
+                        <label class="field">
+                            <span class="field-label">Livro</span>
+                            <select class="input" id="livro-select"></select>
+                        </label>
+                        <div class="field-row">
+                            <label class="field">
+                                <span class="field-label">Capítulo</span>
+                                <select class="input" id="capitulo-select"></select>
+                            </label>
+                            <label class="field">
+                                <span class="field-label">Versículo</span>
+                                <select class="input" id="versiculo-select"></select>
+                            </label>
+                        </div>
+                        <button id="botao-select" class="primary-btn" onclick="buscarVersiculo()">Pesquisar</button>
+                    </div>
+
+                    <div id="sem-resultado" class="empty">
+                        <p class="mono">selecione livro · capítulo · versículo<br>para ver o texto aqui</p>
+                    </div>
+
+                    <div id="resultado" hidden>
+                        <h3 id="referencia"></h3>
+                        <p id="texto" class="verso"></p>
+                        <button id="mais-btn" class="line-btn full" hidden onclick="mostrarMais()">Ver mais versículos</button>
+                        <div id="mais-versiculos" class="versos-lista" data-hm-scroll="true"></div>
+                    </div>
+                </section>
+            </aside>
+        </main>
+
+        <!-- Footer Pagina -->
+        <section class="sobre">
+            <div class="sobre-inner">
+                <div>
+                    <h2 class="sobre-title">Sobre o projeto</h2>
+                    <p class="sobre-text">HolyMind é uma plataforma de estudo bíblico com IA. Esta versão reduzida roda sem login, sem banco de dados e sem histórico no servidor — nenhum dado seu é armazenado.</p>
+                    <p class="mono muted">FastAPI · Python 3.9+ · OpenAI GPT-4o mini</p>
                 </div>
-                <div id="resultado">
-                    <h2 id="referencia"></h2>
-                    <p id="texto"></p>
-                    <button id="mais-btn" style="display:none" onclick="mostrarMais()">Ver mais versículos</button>
-                    <div id="mais-versiculos" class="fade-in"></div>
+                <div>
+                    <h2 class="sobre-title">Créditos</h2>
+                    <div class="creditos">
+                        <a href="https://github.com/EnzoHashinokutiXavier" target="_blank" rel="noopener">
+                            <span class="credito-nome">Enzo Hashinokuti</span>
+                            <span class="credito-papel">Criador do primeiro protótipo · Backend Python</span>
+                        </a>
+                        <a href="https://github.com/Augustbr01" target="_blank" rel="noopener">
+                            <span class="credito-nome">Augusto Corrêa</span>
+                            <span class="credito-papel">Co-criador do protótipo · Frontend JS e HTML</span>
+                        </a>
+                        <a href="https://github.com/Geovana-Manu" target="_blank" rel="noopener">
+                            <span class="credito-nome">Geovana</span>
+                            <span class="credito-papel">Estilização da primeira versão · Frontend CSS</span>
+                        </a>
+                        <a href="https://github.com/LuizEduardoMarchi" target="_blank" rel="noopener">
+                            <span class="credito-nome">Luiz Eduardo</span>
+                            <span class="credito-papel">Planejamento visual futuro · JavaScript</span>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="sobre-title">Repositórios</h2>
+                    <div class="repos">
+                        <a href="https://github.com/EnzoHashinokutiXavier/HolyMind-V1-Reduced-Version.git" target="_blank" rel="noopener">Repositorio da versão atual</a>
+                        <a href="https://github.com/EnzoHashinokutiXavier/HolyMind.git" target="_blank" rel="noopener">Repositorio em desenvolvimento</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Aviso IA Footer  -->
+        <footer class="rodape">
+            <p>Respostas geradas por IA podem conter erros — confira sempre o texto bíblico. PolyForm Noncommercial License com proteção de marca HolyMind.</p>
+            <span class="spacer"></span>
+            <span class="mono muted">© 2026 HolyMind</span>
+        </footer>
 
         <!-- Alerts Modal -->
         <div id="avisos-overlay" onclick="fecharAvisos()">
-            <div class="avisos-modal" onclick="event.stopPropagation()">
-                <button class="close-btn" onclick="fecharAvisos()"></button>
-                <h2>Sobre esta versão</h2>
+            <div class="avisos-modal" data-hm-scroll="true" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="fecharAvisos()" aria-label="Fechar">×</button>
+                <span class="eyebrow accent">Sobre esta versão</span>
+                <h2>HolyMind V1 — Versão Reduzida</h2>
+                <p class="modal-lede">Esta é uma versão reduzida e simplificada do HolyMind, disponibilizada gratuitamente para que você possa usar as funções principais sem necessidade de criar uma conta ou compartilhar seus dados.</p>
 
-                <p><strong>HolyMind V1 — Versão Reduzida</strong></p>
+                <h3>O que você pode fazer</h3>
+                <div class="modal-list">
+                    <div class="modal-item filled">
+                        <p class="modal-item-title">IA para estudos bíblicos</p>
+                        <p class="modal-item-text">Faça perguntas e receba explicações sobre trechos da Bíblia usando inteligência artificial (powered by OpenAI)</p>
+                    </div>
+                    <div class="modal-item filled">
+                        <p class="modal-item-title">Busca de versículos</p>
+                        <p class="modal-item-text">Pesquise versículos específicos por livro, capítulo e versículo com dados armazenados localmente em JSON</p>
+                    </div>
+                </div>
 
-                <p>Esta é uma versão reduzida e simplificada do HolyMind, disponibilizada gratuitamente para que você possa usar as funções principais sem necessidade de criar uma conta ou compartilhar seus dados.</p>
+                <h3>Por que alguns recursos foram removidos</h3>
+                <p class="modal-lede">Os seguintes recursos foram temporariamente removidos desta versão para garantir segurança e conformidade:</p>
+                <div class="modal-grid">
+                    <div class="modal-item">
+                        <p class="modal-item-title">Login e contas</p>
+                        <p class="modal-item-text">Você não precisa criar uma conta para usar o HolyMind</p>
+                    </div>
+                    <div class="modal-item">
+                        <p class="modal-item-title">Histórico de conversas</p>
+                        <p class="modal-item-text">Nenhum dado seu é armazenado no servidor</p>
+                    </div>
+                    <div class="modal-item">
+                        <p class="modal-item-title">Banco de dados</p>
+                        <p class="modal-item-text">Mantemos zero dados persistentes de usuários</p>
+                    </div>
+                    <div class="modal-item">
+                        <p class="modal-item-title">Bíblias em PDF</p>
+                        <p class="modal-item-text">Evitamos distribuir PDFs protegidos por direitos autorais</p>
+                    </div>
+                </div>
 
-                <h3>O que você pode fazer:</h3>
-                <ul style="color: #cdd3d4;">
-                    <li><strong>IA para estudos bíblicos:</strong> Faça perguntas e receba explicações sobre trechos da Bíblia usando inteligência artificial (powered by OpenAI)</li>
-                    <li><strong>Busca de versículos:</strong> Pesquise versículos específicos por livro, capítulo e versículo com dados armazenados localmente em JSON</li>
-                </ul>
-
-                <h3>Por que alguns recursos foram removidos:</h3>
-                <p>Os seguintes recursos foram temporariamente removidos desta versão para garantir segurança e conformidade:</p>
-                <ul style="color: #cdd3d4;">
-                    <li><strong>Login e contas de usuário:</strong> Você não precisa criar uma conta para usar o HolyMind</li>
-                    <li><strong>Histórico de conversas:</strong> Nenhum dado seu é armazenado no servidor</li>
-                    <li><strong>Banco de dados:</strong> Mantemos zero dados persistentes de usuários</li>
-                    <li><strong>Bíblias em PDF:</strong> Evitamos distribuir PDFs protegidos por direitos autorais</li>
-                </ul>
-
-                <p style="margin-top: 24px; margin-bottom: 24px;">Conheça os repositórios do projeto:</p>
+                <p class="modal-lede">Conheça os repositórios do projeto:</p>
                 <div class="avisos-links">
-                    <a href="https://github.com/EnzoHashinokutiXavier/HolyMind-V1-Reduced-Version.git" target="_blank" rel="noopener">Repositório do código desta versão</a>
+                    <a class="primary" href="https://github.com/Augustbr01/HolyMind-V1-Reduced-Version.git" target="_blank" rel="noopener">Repositório desta versão</a>
                     <a href="https://github.com/EnzoHashinokutiXavier/HolyMind.git" target="_blank" rel="noopener">Repositório em desenvolvimento</a>
                 </div>
             </div>
