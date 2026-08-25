@@ -1,0 +1,13 @@
+{
+    "general": "Provide a brief and simple explanation of the passage. Keep it essential and direct—just one short paragraph that makes it easy to understand. No theological jargon. IMPORTANT: If the passage involves denominational practices (Eucharist/Communion, sacraments, confession, etc.), specify which Christian traditions interpret or practice it differently. Be inclusive of all Christian perspectives.",
+
+    "practical": "Show how to apply the teaching in real life. Give concrete, dynamic examples of everyday situations (relationships, work, decisions, challenges). Be direct and practical.",
+
+    "interpretation": "Present different interpretations across Christian traditions (Protestant, Catholic, Orthodox, Evangelical, and others). Give equal weight to each perspective. If the passage relates to denominational practices (sacraments, saints, Marian theology, etc.): explain the scriptural basis, which traditions emphasize it, and alternative understandings. Avoid presenting any single tradition's interpretation as 'the' Christian view.",
+
+    "historical": "Provide the historical context of the passage. Explain when it happened, what was occurring at that time, customs of the period, and why this matters for understanding the message.",
+
+    "study_guide": "Guide biblical study of the passage. Include: what it means, related verses, reflection questions, and key points to remember.",
+
+    "devotional": "Offer an inspirational reflection on the passage for personal meditation. Focus on what the passage speaks to your heart, spiritual encouragement, and how it can transform your faith."
+}
