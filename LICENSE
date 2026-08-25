@@ -1,21 +1,84 @@
-MIT License
+PolyForm Noncommercial License 1.0.0 (with HolyMind Brand Protection Amendment)
+
+Based on: https://polyformproject.org/licenses/noncommercial/1.0.0
 
 Copyright (c) 2025 Enzo Hashinokuti Xavier, Augusto Gatti Corrêa, Luiz Eduardo Marchi da Silva.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## Acceptance
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+To obtain any license under these terms, you must agree to them as strict obligations and conditions to all your licenses.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## Copyright License
+
+The licensor grants you a copyright license for the software to do everything that would otherwise infringe the licensor's copyright in the software for any permitted purpose. However, distribution must follow the Distribution License, and changes must follow the Changes and New Works License.
+
+## Distribution License
+
+The licensor grants you an additional copyright license to distribute copies of the software, including modifications and derivative works permitted under the Changes and New Works License, provided you comply with the Noncommercial Purposes requirement and all other terms of this license.
+
+## Notices
+
+You must ensure that everyone who receives the software from you receives these terms or a URL at which they can review these terms, plus any plain-text lines beginning with "Required Notice:" that the licensor has provided.
+
+## Changes and New Works License
+
+The licensor grants you an additional copyright license to make changes and derivative works of the software for any permitted purpose. You may distribute those changes and new works under any license, provided you:
+
+1. Comply with the Noncommercial Purposes requirement in any distributions;
+2. Do not use the HolyMind name or present modified works as official HolyMind versions without explicit written authorization from the copyright holders (see "HolyMind Brand Protection Amendment" section below).
+
+## Patent License
+
+The licensor grants you a patent license for any patent claims in the software that the licensor can license, or becomes able to license, for everything you are permitted to do under this license.
+
+## Noncommercial Purposes
+
+The only permitted purposes for this software are noncommercial purposes. Noncommercial purposes include:
+
+1. Personal uses, research, experimentation, testing, study, entertainment, hobbies, and amateur pursuits;
+2. Educational uses in schools and universities;
+3. Charitable, scientific, public research, public health, environmental protection, and governmental uses;
+4. Noncommercial organizations.
+
+Any use intended to generate revenue, profit, commercial advantage, or monetary compensation of any kind is prohibited, regardless of whether the revenue is direct or indirect, and regardless of the form of compensation (including but not limited to: selling access, charging fees, subscriptions, advertising revenue, data monetization, or any other commercial benefit).
+
+## Fair Use
+
+Any applicable fair use rights under law are preserved.
+
+## No Other Rights
+
+These terms do not permit sublicensing or transfers of licenses to third parties.
+
+## Patent Defense
+
+If you file a lawsuit or other proceeding against the licensor relating to the patent license, your license terminates immediately.
+
+## Violations
+
+Upon written notice of a violation of these terms, you will have 32 days to achieve full compliance and correct any past violations. Otherwise, all licenses under these terms terminate immediately.
+
+## No Liability
+
+As far as the law allows, the software comes as is, without any warranty or condition, and the licensor will not be liable for any damages for any use of the software, under any legal theory.
+
+## Definitions
+
+- **Licensor**: The individual or entity offering the software under these terms
+- **Software**: The code and documentation provided under these terms
+- **You**: The individual or legal entity that accepts these terms
+- **Your Company**: Any legal entities you work for or control, including parent, subsidiary, or affiliated organizations
+- **Control**: Direct or indirect ownership or power to direct management of substantially all assets
+- **Use**: Anything you do with the software that requires one of your licenses
+
+## HolyMind Brand Protection Amendment
+
+In addition to the restrictions above, you agree not to:
+
+1. Publish, host, or distribute the software or any modified version of it publicly under the HolyMind name or using HolyMind branding, logos, or identifying marks without explicit written authorization from all copyright holders.
+
+2. Present the software or any derivative work as an official version of HolyMind or as endorsed by HolyMind without written authorization from all copyright holders.
+
+3. Use the HolyMind name or brand in any public distribution, marketing, or presentation of the software or modified versions thereof, except as required to accurately attribute the original work and comply with these license terms.
+
+If you wish to contribute improvements back to the HolyMind project, please contact the copyright holders or follow the contribution process described in CONTRIBUTING.md. Contributions may be incorporated into official branches or versions at the sole discretion of the copyright holders.

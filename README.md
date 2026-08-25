@@ -1,32 +1,58 @@
 # HolyMind
 
-A project developed for biblical learning.
-With several features, the project currently includes an AI assistant that explains Bible passages in various ways, useful for both laymen and those looking to deepen their knowledge.
-Find Bible passages by book, chapter, and verse!
+> 📖 An intelligent biblical learning platform powered by AI
 
-## Requirements
-
-- Python 3.8+
-- An [OpenAI API key](https://platform.openai.com/)
-- The packages listed in `requirements.txt`
+A web application that helps users understand Bible passages through multiple perspectives and study methods. HolyMind leverages AI to provide comprehensive explanations, historical context, and devotional insights suitable for all levels of biblical knowledge.
 
 ---
 
-## Installation
+## ✨ Features
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/EnzoHashinokutiXavier/HolyMind.git
-   ```
+- **📖 General Explanation** - Understand Bible passages in simple, accessible language
+- **💼 Practical Interpretation** - Discover how biblical teachings apply to everyday life  
+- **🏛️ Theological Analysis** - Deep theological insights and scholarly perspective
+- **📜 Historical Context** - Explore the historical background and cultural setting of passages
+- **📚 Study Guide** - Structured learning with key points and reflection questions
+- **✨ Devotional** - Spiritual reflection and personal meditation on passages
 
-2. **Install dependencies:**
-   ```sh
-   pip install -r requirements.txt
-   ```
+---
 
-3. **Set your OpenAI API key as an environment variable:**
+## 🛠️ Tech Stack
 
-   On Windows (Command Prompt):
+- **Backend:** FastAPI 0.104.1, Python 3.9+
+- **Frontend:** HTML, CSS, JavaScript
+- **AI:** OpenAI API (GPT-4o Mini)
+- **Server:** Uvicorn with standard features
+- **Environment:** python-dotenv for secure configuration
+
+---
+
+## 📋 Requirements
+
+- **Python 3.9+**
+- **OpenAI API Key** ([Get one here](https://platform.openai.com/))
+- **pip** (Python package manager)
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/EnzoHashinokutiXavier/HolyMind-V1-Reduced-Version.git
+cd HolyMind
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure Environment Variables
+
+  On Windows (Command Prompt):
    ```sh
    setx OPENAI_API_KEY "your-openai-key"
    ```
@@ -37,25 +63,45 @@ Find Bible passages by book, chapter, and verse!
    export OPENAI_API_KEY="your-openai-key"
    ```
 
+> ⚠️ **Important Notes:**
+> - Get your API key from: https://platform.openai.com/
+
+### 4. Start the Application
+
+```bash
+uvicorn backend.main:app --reload
+```
+
+The application will be available at: **http://localhost:8000**
+
 ---
 
-<img width="1098" height="323" alt="image" src="https://github.com/user-attachments/assets/818dcff7-7f56-40cd-9e84-8cd1d4b69ccd" />
+## 📚 API Endpoints
 
+All endpoints accept a JSON POST request with the Bible passage reference or text.
 
-## Usage
+| Endpoint | Description | Best For |
+|----------|-------------|----------|
+| `/general-explanation` | Simple, accessible explanation | Beginners & quick understanding |
+| `/practical-explanation` | Real-world application of teachings | Applying lessons to daily life |
+| `/interpretations-explanation` | Theological analysis | Advanced theological study |
+| `/historical-explanation` | Historical & cultural context | Understanding passage origins |
+| `/study-guide-explanation` | Structured study material | Organized learning & reflection |
+| `/devotional-explanation` | Spiritual meditation & reflection | Personal spiritual growth |
+| `/` (GET) | Serve the web interface | Browser access |
 
-1. **Start the backend server:**
-   ```sh
-   uvicorn backend.main:app --reload
-   ```
+---
 
-2. **Access the frontend:**  
-   Open [http://localhost:8000](http://localhost:8000) in your browser.
+## 📖 Documentation
 
-<img width="1914" height="630" alt="image" src="https://github.com/user-attachments/assets/ab932efd-bf16-44f7-b94a-aca5916a9d0f" />
+- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
+- **[Code of Conduct](.github/CODE_OF_CONDUCT.md)** - Community guidelines
+- **[Security Policy](.github/SECURITY.md)** - Reporting security vulnerabilities
+- **[License](LICENSE)** - PolyForm Noncommercial License with HolyMind Brand Protection
 
+---
 
-# Contributors
+## 🤝 Contributors
 
 ## [Enzo Hashinokuti](https://github.com/EnzoHashinokutiXavier)
 

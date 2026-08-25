@@ -1,20 +1,31 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+name: ✨ Feature Request
+about: Suggest a new feature for HolyMind
+title: "[FEATURE] "
+labels: enhancement
+---
+
+## Description
+<!-- Clear description of the feature you'd like -->
+
+## Use Case
+<!-- Explain why this feature is needed and how it would help users -->
+
+## Proposed Solution
+<!-- Describe how the feature should work -->
+
+## Alternative Approaches
+<!-- Have you considered other ways to solve this? -->
+
+## Additional Context
+<!-- Any diagrams, mockups, or examples? -->
+
+## Compliance Note
+<!-- Please confirm that this feature aligns with the PolyForm Noncommercial License -->
+- [ ] This feature is for non-commercial use only
+- [ ] This does not involve commercial revenue generation
+- [ ] This does not attempt to rebrand or misrepresent HolyMind
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+Thank you for helping improve HolyMind! 🙏
