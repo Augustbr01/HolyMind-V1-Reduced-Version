@@ -1,4 +1,4 @@
-/* Animação FadeInUp */
+/* Fade Animation */
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -31,11 +31,14 @@ body {
     align-items: flex-start;
     margin-top: 40px;
     flex-wrap: wrap;
-    margin-left: 100px;
+    margin: 40px auto 0;
     width: 90%;
+    max-width: 2200px;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
-.inputbox, .pesquisaLivro { /*Conteudo principal*/
+.inputbox, .pesquisaLivro { /* Main content */
     max-width: 1000px;
     background: #1a2333;
     border: 2px solid rgb(28, 28, 48);
@@ -78,13 +81,14 @@ textarea {
 
 .button {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 16px;
 }
 
 button {
-    flex: 1;
+    flex: 1 1 calc(33.333% - 6px);
+    min-width: 150px;
     padding: 10px;
     background: linear-gradient(to right, #395AEB, #524FEA ,#823AEB);
     color: #ffffff;
@@ -92,7 +96,11 @@ button {
     border-radius: 10px;
     font-size: 1em;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: transform 0.2s, background 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
 }
 
 
@@ -114,7 +122,11 @@ button {
     border-radius: 4px;
     font-size: 1em;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.buttonPesquisar:hover {
+    transform: scale(1.05);
 }
 
 .input {
@@ -133,7 +145,7 @@ h2 {
 }
 
 
-/* sidebar styles */
+/* Sidebar styles */
 
 .sidebar {
     position: fixed;
@@ -206,83 +218,168 @@ h2 {
 
 
 .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
     background: url('/static/img/close.png') no-repeat center;
     background-size: contain;
-    border: none;   
-    width: 50px;
-    height: 50px;
+    border: none;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
-    color:#2d3436
+    color:#2d3436;
+    padding: 0;
 }
 
 .close-btn:hover {
     background: url('/static/img/close.png') no-repeat center;
     background-size: contain;
-    border-color: #fff;   
-    width: 50px;
-    height: 50px;
     cursor: pointer;
-    color:#f9f9f9
+    opacity: 0.8;
 }
 
-/* History Overlay Styles */
 
-.history-btn {
-    width: 40px;
-    height: 40px;
-    background: url('/static/img/history.png') no-repeat center;
-    background-size: contain;
-    border: none;
-    right: 20px;
-    position: absolute;
-    margin-right: 20px;
-}
+/* Alerts Modal */
 
-.history-overlay {
+#avisos-overlay {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 2000;
 }
 
-.history-content {
-    background-color: #fff;
-    margin-right: 250px;
-    margin-left: 250px;
-    padding: 20px;
-    border-radius: 20px;
-    width: 65%;
-    height: 60%;
-    max-height: 80vh;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    animation: fadeInUp 0.3s ease;
-
-    display: flex;              /* 🔥 faz o body ocupar espaço dentro */
-    flex-direction: column;
-    white-space: pre-line;
-}
-
-.history-header {
+#avisos-overlay.fade-in {
     display: flex;
-    justify-content: space-between;
-    padding-left: 50px;
+    animation: fadeIn 0.3s ease forwards;
 }
 
-.history-body {
-    flex: 1;
-    padding: 20px;
+#avisos-overlay.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.avisos-modal {
+    position: relative;
+    background: #1a2333;
+    border: 2px solid rgb(28, 28, 48);
+    border-radius: 8px;
+    padding: 32px 24px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
     overflow-y: auto;
+    color: #cdd3d4;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-.markdown-answer p {
-    margin: 0 0 10px 0;
+.avisos-modal h2 {
+    color: #584DE8;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.avisos-modal h3 {
+    color: #7d74ff;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}
+
+.avisos-modal ul {
+    margin: 8px 0;
+    padding-left: 20px;
     line-height: 1.6;
 }
 
+.avisos-modal ul li {
+    margin-bottom: 8px;
+}
 
+.avisos-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.avisos-links a {
+    flex: 1 1 calc(33.333% - 6px);
+    min-width: 150px;
+    padding: 10px;
+    background: linear-gradient(to right, #395AEB, #524FEA, #823AEB);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95em;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.avisos-links a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(82, 79, 234, 0.4);
+}
+
+#btn-avisos {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s;
+}
+
+#btn-avisos:hover {
+    transform: scale(1.15);
+}
+
+@media (max-width: 1024px) {
+    .container {
+        gap: 50px;
+        width: 95%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        gap: 24px;
+        padding: 0 12px;
+    }
+
+    .inputbox, .pesquisaLivro {
+        min-width: 0;
+        flex: 0 0 100%;
+        padding: 24px 16px;
+    }
+
+    .input {
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    button {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 100px;
+    }
+
+    .avisos-modal {
+        max-width: 95%;
+        max-height: 90vh;
+    }
+
+    .avisos-links a {
+        flex: 1 1 100%;
+        min-width: auto;
+    }
+}

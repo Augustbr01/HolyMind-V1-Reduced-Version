@@ -1,35 +1,53 @@
 
 
-// Código para interagir com a API e mostrar a resposta da IA na tela
+// Functions for Alerts Modal
+
+function abrirAvisos() {
+    const overlay = document.getElementById('avisos-overlay');
+    overlay.classList.remove('fade-out');
+    overlay.classList.add('fade-in');
+}
+
+function fecharAvisos() {
+    const overlay = document.getElementById('avisos-overlay');
+    overlay.classList.remove('fade-in');
+    overlay.classList.add('fade-out');
+    setTimeout(() => {
+        overlay.classList.remove('fade-out');
+    }, 300);
+}
 
 
-async function sendRequest(type) { // Função para requisitar a resposta da IA, mandando a entrada do usuario para a API
-    const entrada = document.getElementById('entrada').value.trim(); 
+// Code to interact with the API and display the AI's response on screen
+
+
+async function sendRequest(type) { // Function to request the AI's response, sending the user's input to the API
+    const entrada = document.getElementById('entrada').value.trim();
     const respostaIA = document.getElementById('resposta');
 
     if (!entrada) {
-        respostaIA.innerText = "DIGITA ALGUMA COISA AI NÉ CARA"; // Texto para caso o usuario não digite nada
+        respostaIA.innerText = "DIGITE ALGO PRIMEIRO"; // Text for when the user doesn't type anything
         return;
     }
 
-    respostaIA.innerText = "Carregando espera ai..."; // Texto para loading
+    respostaIA.innerText = "Carregando ..."; // Loading text
 
     try {
-        const resp = await fetch(`/${type}`, { // mandando a requisição
-            method: "POST", // tipo da requisição
-            headers: {"Content-Type": "application/json"}, // tipo de conteudo da requisição
-            body: JSON.stringify({text: entrada}) // corpo em json do conteudo a ser recebido da API
+        const resp = await fetch(`/${type}`, { // Sending the request
+            method: "POST", // Request type
+            headers: {"Content-Type": "application/json"}, // Request content type
+            body: JSON.stringify({text: entrada}) // JSON body of the content to be received from the API
         });
 
-        if (resp.ok) { // Se a resposta da api for OK
-            const data = await resp.json(); // Data vai esperar um json
-            respostaIA.innerHTML = data.explanation; // O json vai ser mostrado no html diretamente na div de ID resposta da IA
-        } else { 
-            const dataErro = await resp.json(); // Caso responda fora da condição, o erro esperado ser gerado vai ser exibido na div de ID resposta
+        if (resp.ok) { // If the API response is OK
+            const data = await resp.json(); // Data will wait for JSON
+            respostaIA.innerHTML = data.explanation; // The JSON will be displayed in HTML directly in the response div
+        } else {
+            const dataErro = await resp.json(); // If the response is outside the condition, the expected error will be displayed in the response div
             respostaIA.innerText = dataErro.detail
                 ? `Erro: ${dataErro.detail}`
                 : "Error fetching explanation.";
-        }  
+        }
     } catch (error) {
         respostaIA.innerText = "Internet ta ruim ou o servidor caiu :("
     }
@@ -37,7 +55,7 @@ async function sendRequest(type) { // Função para requisitar a resposta da IA,
 
 
 
-// Código para popular os selects de livros, capítulos e versículos da bíblia
+// Code to populate the selects for Bible books, chapters and verses
 
 
 
@@ -45,53 +63,53 @@ async function sendRequest(type) { // Função para requisitar a resposta da IA,
 let versiculos = [];
 let versiculosDoCapitulo = [];
 
-fetch('/static/bibles/biblia.json') // busca o arquivo JSON no servidor
-  .then(res => res.json()) // converte a resposta em JSON
-  .then(data => { // armazena os dados na variável global
-    versiculos = data; // array de versículos
-    popularLivros(); // chama a função para popular os livros no select
+fetch('/static/bibles/biblia.json') // Fetches the JSON file from the server
+  .then(res => res.json()) // Converts the response to JSON
+  .then(data => { // Stores the data in the global variable
+    versiculos = data; // Array of verses
+    popularLivros(); // Calls the function to populate the books in the select
   })
-    .catch(err => console.error("Erro no fetch:", err));
+    .catch(err => console.error("Error in fetch:", err));
 
-function popularLivros() { // popula o select de livros
-  const livroSelect = document.getElementById('livro-select'); // pega o select do HTML
+function popularLivros() { // Populates the books select
+  const livroSelect = document.getElementById('livro-select'); // Gets the select from HTML
 
-  // gera lista única de livros usando livro_id como valor e livro como label
-  const livros = [...new Map(versiculos.map(v => [v.livro_id, v.livro])).entries()]; // array de arrays [id, nome]
+  // Generates unique list of books using book_id as value and book as label
+  const livros = [...new Map(versiculos.map(v => [v.livro_id, v.livro])).entries()]; // Array of arrays [id, name]
 
   livroSelect.innerHTML = `<option value="" disabled selected>Selecione o Livro</option>`;
-  livros.forEach(([id, nome]) => { // para cada livro, cria uma opção no select
-    const opt = document.createElement('option'); // cria o elemento option
-    opt.value = id;          // usar id único para o value
-    opt.textContent = nome;  // mostrar nome do livro
-    livroSelect.appendChild(opt); // adiciona a opção ao select
+  livros.forEach(([id, nome]) => { // For each book, creates an option in the select
+    const opt = document.createElement('option'); // Creates the option element
+    opt.value = id;          // Use unique id for the value
+    opt.textContent = nome;  // Show book name
+    livroSelect.appendChild(opt); // Adds the option to the select
   });
 
-  livroSelect.addEventListener('change', () => { // quando o livro mudar
-    const livroId = livroSelect.value; // pega o id do livro selecionado
-    const capituloSelect = document.getElementById('capitulo-select'); // pega o select de capítulos
+  livroSelect.addEventListener('change', () => { // When the book changes
+    const livroId = livroSelect.value; // Gets the id of the selected book
+    const capituloSelect = document.getElementById('capitulo-select'); // Gets the chapters select
 
-    // pega todos os capítulos desse livro
+    // Gets all chapters of this book
     const capitulos = [...new Set(
-      versiculos.filter(v => v.livro_id === livroId).map(v => String(v.capitulo)) // array único de capítulos
+      versiculos.filter(v => v.livro_id === livroId).map(v => String(v.capitulo)) // Unique array of chapters
     )];
 
-    capituloSelect.innerHTML = `<option value="" disabled selected>Capítulo</option>`; 
-    capitulos.forEach(cap => { // para cada capítulo, cria uma opção no select
-      const opt = document.createElement('option'); // cria o elemento option
+    capituloSelect.innerHTML = `<option value="" disabled selected>Capítulo</option>`;
+    capitulos.forEach(cap => { // For each chapter, creates an option in the select
+      const opt = document.createElement('option'); // Creates the option element
       opt.value = cap;
       opt.textContent = cap;
       capituloSelect.appendChild(opt);
     });
 
-    capituloSelect.onchange = () => { // quando o capítulo mudar
-      const cap = capituloSelect.value; // pega o capítulo selecionado
-      const versiculoSelect = document.getElementById('versiculo-select'); // pega o select de versículos
+    capituloSelect.onchange = () => { // When the chapter changes
+      const cap = capituloSelect.value; // Gets the selected chapter
+      const versiculoSelect = document.getElementById('versiculo-select'); // Gets the verses select
 
-      // pega todos os versículos do capítulo
+      // Gets all verses of the chapter
       const vers = versiculos
-        .filter(v => v.livro_id === livroId && String(v.capitulo) === String(cap)) // filtra por livro e capítulo
-        .map(v => String(v.versiculo)); // array de versículos
+        .filter(v => v.livro_id === livroId && String(v.capitulo) === String(cap)) // Filters by book and chapter
+        .map(v => String(v.versiculo)); // Array of verses
 
       versiculoSelect.innerHTML = `<option value="" disabled selected>Versículo</option>`;
       vers.forEach(v => {
@@ -104,121 +122,47 @@ function popularLivros() { // popula o select de livros
   });
 }
 
-function buscarVersiculo() { // busca o versículo selecionado e mostra no HTML
+function buscarVersiculo() { // Searches for the selected verse and displays it in HTML
   const livroId = document.getElementById('livro-select').value;
   const cap = document.getElementById('capitulo-select').value;
   const vers = document.getElementById('versiculo-select').value;
 
-  const resultado = versiculos.find(v => // encontra o versículo exato
-    v.livro_id === livroId && // filtra por livro
-    String(v.capitulo) === String(cap) && // filtra por capítulo
-    String(v.versiculo) === String(vers) // filtra por versículo
+  const resultado = versiculos.find(v => // Finds the exact verse
+    v.livro_id === livroId && // Filters by book
+    String(v.capitulo) === String(cap) && // Filters by chapter
+    String(v.versiculo) === String(vers) // Filters by verse
   );
 
-  document.getElementById('referencia').textContent = `${resultado.livro} ${cap}:${vers}`; // mostra a referência
-  document.getElementById('texto').textContent = resultado?.texto || 'Não encontrado'; // mostra o texto do versículo
+  document.getElementById('referencia').textContent = `${resultado.livro} ${cap}:${vers}`; // Shows the reference
+  document.getElementById('texto').textContent = resultado?.texto || 'Não encontrado'; // Shows the verse text
 
-  // Guarda todos os versículos do capítulo (pra "mostrar mais")
+  // Stores all verses of the chapter (for "show more")
   versiculosDoCapitulo = versiculos.filter(v =>
-    v.livro_id === livroId && String(v.capitulo) === String(cap) // filtra por livro e capítulo
+    v.livro_id === livroId && String(v.capitulo) === String(cap) // Filters by book and chapter
   );
 
-  document.getElementById('mais-btn').style.display = 'inline-block'; // mostra o botão "mostrar mais"
-  document.getElementById('mais-versiculos').innerHTML = ''; // limpa a área de mais versículos
+  document.getElementById('mais-btn').style.display = 'inline-block'; // Shows the "show more" button
+  document.getElementById('mais-versiculos').innerHTML = ''; // Clears the more verses area
 }
 
-function mostrarMais() { // mostra mais versículos a partir do selecionado
+function mostrarMais() { // Shows more verses starting from the selected one
   const versSelecionado = document.getElementById('versiculo-select').value;
   const container = document.getElementById('mais-versiculos');
   container.innerHTML = '';
 
-  let iniciou = false; // flag para começar a mostrar versículos
-  versiculosDoCapitulo.forEach(v => { // percorre os versículos do capítulo
-    if (String(v.versiculo) === String(versSelecionado)) iniciou = true; // começa a mostrar a partir do versículo selecionado
-    if (iniciou) { // se já iniciou, mostra o versículo
-      const p = document.createElement('p'); 
-      p.textContent = `${v.capitulo}:${v.versiculo} — ${v.texto}`; // formata o texto
-      container.appendChild(p); // adiciona ao container
+  let iniciou = false; // Flag to start displaying verses
+  versiculosDoCapitulo.forEach(v => { // Iterates through the verses of the chapter
+    if (String(v.versiculo) === String(versSelecionado)) iniciou = true; // Starts showing from the selected verse
+    if (iniciou) { // If already started, shows the verse
+      const p = document.createElement('p');
+      p.textContent = `${v.capitulo}:${v.versiculo} — ${v.texto}`; // Formats the text
+      container.appendChild(p); // Adds to the container
     }
   });
 
-  container.scrollIntoView({ // rola a página até os versículos mostrados
-    behavior: "smooth", // animação suave
-    block: "start" // alinha ao topo
+  container.scrollIntoView({ // Scrolls the page to the displayed verses
+    behavior: "smooth", // Smooth animation
+    block: "start" // Aligns to the top
   });
 }
 
-// Código para abrir e fechar a sidebar de PDF
-
-function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const togglebtn = document.querySelector('.openbtn'); // agora pega pela classe
-
-  sidebar.classList.toggle('open');
-
-  if (sidebar.classList.contains('open')) {
-    togglebtn.classList.add('open');   // some o botão
-  } else {
-    togglebtn.classList.remove('open'); // aparece de novo
-  }
-}
-
-
-// Código para abrir e fechar o histórico de perguntas e respostas
-
-async function loadHistory() {
-  try {
-    const res = await fetch('/history-view'); // busca o histórico na API
-    const data = await res.json(); // converte a resposta em JSON
-
-    const container = document.getElementById('history-messages');
-    container.innerHTML = ''; // limpa o container
-
-    data.forEach(item => {
-    const block = document.createElement("div");
-    block.classList.add("history-item");
-
-    const respostaHTML = marked.parse(item.answer);
-    
-    block.innerHTML = `
-      <p><strong>Pergunta:</strong> ${item.question}</p>
-      <p><strong>Tipo:</strong> ${item.type}</p>
-      <p><strong>Resposta:</strong></p>
-      <div class="markdown-answer">${respostaHTML}</div>
-      <hr>
-    `;
-
-    container.appendChild(block);
-  });
-  } catch (err) {
-    console.error("Erro ao carregar histórico:", err);
-  }
-}
-
-
-
-function toggleHistory() {
-  const modal = document.querySelector(".history-overlay");
-  
-  if (modal.style.display === "flex") {
-    // 🚪 FECHAR
-    modal.classList.remove("fade-in");
-    modal.classList.add("fade-out");
-
-    // só esconde depois da animação terminar
-    modal.addEventListener("animationend", () => {
-      if (modal.classList.contains("fade-out")) {
-        modal.style.display = "none";
-      }
-    }, { once: true });
-
-  } else {
-    // 🚀 ABRIR
-    modal.style.display = "flex";
-    modal.classList.remove("fade-out");
-    modal.classList.add("fade-in");
-    loadHistory();
-  }
-
-   // carrega o histórico sempre que abrir
-}

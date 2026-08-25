@@ -13,72 +13,19 @@
         
     </head>
     <body>
-        <div class="history-overlay">
-            <div class="history-content">
-                <div class="history-header">
-                    <h2>Histórico de Perguntas</h2>
-                    <a>
-                        <button class="close-btn" onclick="toggleHistory()"></button>
-                    </a>
-                </div>
-                <div class="history-body" id="history-messages">
-                    <p>Mensagens antigas aqui..</p>
-                </div>
-            </div>
-        </div>
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h2>PDF's</h2>
-                <a>
-                    <button class="close-btn" onclick="toggleSidebar()"></button>
-                </a>
-            </div>
-            <div class="card1">
-                <a href="/static/bibles/Biblia-Sagrada-RA-Almeida-Rev-Sociedade-Biblica-do-Brasil.pdf" target="_blank">
-                    <img src="/static/img/biblia.png" alt="imagemBiblia" class="btn-img">
-                </a>
-                <p>Versão Almeida</p>
-            </div>
-            <div class="card2">
-                <a href="/static/bibles/Portugues-Catolica-AVM-All-Bible.pdf" target="_blank">
-                    <img src="/static/img/biblia.png" alt="imagemBiblia" class="btn-img">
-                </a>
-                <p>Versão Catolica</p>
-            </div>
-            <div class="card3">
-                <a href="/static/bibles/The-Holy-Bible-King-James-Version.pdf" target="_blank">
-                    <img src="/static/img/biblia.png" alt="imagemBiblia" class="btn-img">
-                </a>
-                <p>The King James</p>
-            </div>
-            <div class="card4">
-                <a href="/static/bibles/antigo-testamento-interlinear-hebraico-portugues-vol-3.pdf" target="_blank">
-                    <img src="/static/img/biblia.png" alt="imagemBiblia" class="btn-img">
-                </a>
-                <p>Interlinear Hebraico</p>
-            </div>
-            <div class="card5">
-                <a href="/static/bibles/Novo-testamento-interlinear-grego-portugues.pdf" target="_blank">
-                    <img src="/static/img/biblia.png" alt="imagemBiblia" class="btn-img">
-                </a>
-                <p>Novo Testamento Grego</p>
-            </div>
-        </div>
-
-        <button class="openbtn" id="toggle-btn" onclick="toggleSidebar()"></button>
-
         <div class="container">
             <div class="inputbox">
-                <a>
-                    <button class="history-btn" onclick="toggleHistory()"></button>
-                </a>
                 <h1>HolyMind</h1>
+                <button id="btn-avisos" onclick="abrirAvisos()">ℹ️</button>
                 <p>Faça perguntas ou peça explicações de trecho da biblia para IA</p>
                 <textarea id="entrada" placeholder="Pergunte algo como: 'Explique a parábola do filho pródigo'"></textarea>
                 <div class="button">
                     <button onclick="sendRequest('general-explanation')">Prompt Geral</button>
-                    <button onclick="sendRequest('practical-explanation')">Aprofundado Pratico</button>
+                    <button onclick="sendRequest('practical-explanation')">Aprofundado Prático</button>
                     <button onclick="sendRequest('interpretations-explanation')">Interpretação Variada</button>
+                    <button onclick="sendRequest('historical-explanation')">Contexto Histórico</button>
+                    <button onclick="sendRequest('study-guide-explanation')">Guia de Estudo</button>
+                    <button onclick="sendRequest('devotional-explanation')">Devocional</button>
                 </div>
                 <div id="resposta"></div>
             </div>
@@ -102,6 +49,40 @@
                 </div>
             </div>
         </div>
+
+        <!-- Alerts Modal -->
+        <div id="avisos-overlay" onclick="fecharAvisos()">
+            <div class="avisos-modal" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="fecharAvisos()"></button>
+                <h2>Sobre esta versão</h2>
+
+                <p><strong>HolyMind V1 — Versão Reduzida</strong></p>
+
+                <p>Esta é uma versão reduzida e simplificada do HolyMind, disponibilizada gratuitamente para que você possa usar as funções principais sem necessidade de criar uma conta ou compartilhar seus dados.</p>
+
+                <h3>O que você pode fazer:</h3>
+                <ul style="color: #cdd3d4;">
+                    <li><strong>IA para estudos bíblicos:</strong> Faça perguntas e receba explicações sobre trechos da Bíblia usando inteligência artificial (powered by OpenAI)</li>
+                    <li><strong>Busca de versículos:</strong> Pesquise versículos específicos por livro, capítulo e versículo com dados armazenados localmente em JSON</li>
+                </ul>
+
+                <h3>Por que alguns recursos foram removidos:</h3>
+                <p>Os seguintes recursos foram temporariamente removidos desta versão para garantir segurança e conformidade:</p>
+                <ul style="color: #cdd3d4;">
+                    <li><strong>Login e contas de usuário:</strong> Você não precisa criar uma conta para usar o HolyMind</li>
+                    <li><strong>Histórico de conversas:</strong> Nenhum dado seu é armazenado no servidor</li>
+                    <li><strong>Banco de dados:</strong> Mantemos zero dados persistentes de usuários</li>
+                    <li><strong>Bíblias em PDF:</strong> Evitamos distribuir PDFs protegidos por direitos autorais</li>
+                </ul>
+
+                <p style="margin-top: 24px; margin-bottom: 24px;">Conheça os repositórios do projeto:</p>
+                <div class="avisos-links">
+                    <a href="https://github.com/EnzoHashinokutiXavier/HolyMind-V1-Reduced-Version.git" target="_blank" rel="noopener">Repositório do código desta versão</a>
+                    <a href="https://github.com/EnzoHashinokutiXavier/HolyMind.git" target="_blank" rel="noopener">Repositório em desenvolvimento</a>
+                </div>
+            </div>
+        </div>
+
         <script src="/static/js/index.js"></script>
     </body>
 </html>
