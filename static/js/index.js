@@ -166,6 +166,17 @@ fetch('/static/bibles/biblia.json') // Fetches the JSON file from the server
   })
     .catch(err => console.error("Error in fetch:", err));
 
+function preencherSelect(select, itens, placeholder) { // Fills a select with options and auto-selects the first item
+  select.innerHTML = `<option value="" disabled>${placeholder}</option>`;
+  itens.forEach(([valor, rotulo]) => { // For each item, creates an option in the select
+    const opt = document.createElement('option');
+    opt.value = valor;
+    opt.textContent = rotulo;
+    select.appendChild(opt);
+  });
+  select.value = itens.length ? itens[0][0] : ''; // Auto-selects the first option (or the placeholder if empty)
+}
+
 function popularLivros() { // Populates the books select
   const livroSelect = document.getElementById('livro-select'); // Gets the select from HTML
 
@@ -180,41 +191,34 @@ function popularLivros() { // Populates the books select
     livroSelect.appendChild(opt); // Adds the option to the select
   });
 
-  livroSelect.addEventListener('change', () => { // When the book changes
-    const livroId = livroSelect.value; // Gets the id of the selected book
-    const capituloSelect = document.getElementById('capitulo-select'); // Gets the chapters select
+  livroSelect.addEventListener('change', popularCapitulos); // When the book changes, cascades to chapters and verses
+  document.getElementById('capitulo-select').addEventListener('change', popularVersiculos); // When the chapter changes, refills the verses
+}
 
-    // Gets all chapters of this book
-    const capitulos = [...new Set(
-      versiculos.filter(v => v.livro_id === livroId).map(v => String(v.capitulo)) // Unique array of chapters
-    )];
+function popularCapitulos() { // Populates the chapters select of the selected book and selects the first one
+  const livroId = document.getElementById('livro-select').value; // Gets the id of the selected book
+  const capituloSelect = document.getElementById('capitulo-select'); // Gets the chapters select
 
-    capituloSelect.innerHTML = `<option value="" disabled selected>Capítulo</option>`;
-    capitulos.forEach(cap => { // For each chapter, creates an option in the select
-      const opt = document.createElement('option'); // Creates the option element
-      opt.value = cap;
-      opt.textContent = cap;
-      capituloSelect.appendChild(opt);
-    });
+  // Gets all chapters of this book
+  const capitulos = [...new Set(
+    versiculos.filter(v => v.livro_id === livroId).map(v => String(v.capitulo)) // Unique array of chapters
+  )];
 
-    capituloSelect.onchange = () => { // When the chapter changes
-      const cap = capituloSelect.value; // Gets the selected chapter
-      const versiculoSelect = document.getElementById('versiculo-select'); // Gets the verses select
+  preencherSelect(capituloSelect, capitulos.map(cap => [cap, cap]), 'Capítulo');
+  popularVersiculos(); // Cascades so the first verse is already selected too (without searching)
+}
 
-      // Gets all verses of the chapter
-      const vers = versiculos
-        .filter(v => v.livro_id === livroId && String(v.capitulo) === String(cap)) // Filters by book and chapter
-        .map(v => String(v.versiculo)); // Array of verses
+function popularVersiculos() { // Populates the verses select of the selected chapter and selects the first one
+  const livroId = document.getElementById('livro-select').value; // Gets the id of the selected book
+  const cap = document.getElementById('capitulo-select').value; // Gets the selected chapter
+  const versiculoSelect = document.getElementById('versiculo-select'); // Gets the verses select
 
-      versiculoSelect.innerHTML = `<option value="" disabled selected>Versículo</option>`;
-      vers.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v;
-        opt.textContent = v;
-        versiculoSelect.appendChild(opt);
-      });
-    };
-  });
+  // Gets all verses of the chapter
+  const vers = versiculos
+    .filter(v => v.livro_id === livroId && String(v.capitulo) === String(cap)) // Filters by book and chapter
+    .map(v => String(v.versiculo)); // Array of verses
+
+  preencherSelect(versiculoSelect, vers.map(v => [v, v]), 'Versículo');
 }
 
 function buscarVersiculo() { // Searches for the selected verse and displays it in HTML
